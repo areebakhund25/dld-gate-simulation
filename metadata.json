@@ -1,0 +1,5 @@
+{
+  "name": "DLD Gate Simulator",
+  "description": "A web-based Digital Logic Design (DLD) Gate Simulator where users can set binary inputs and see the animated outputs for various logic gates. It also features truth table generation and a dark/light mode toggle for a comfortable user experience.",
+  "requestFramePermissions": []
+}
