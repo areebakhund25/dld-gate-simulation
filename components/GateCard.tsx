@@ -22,7 +22,6 @@ export const GateCard: React.FC<GateCardProps> = ({ gate, inputs, onShowTruthTab
   const output = useMemo(() => gate.logic(inputs), [gate, inputs]);
 
   const GateIcon = gate.svg;
-  const isTruthTableDisabled = (gate.isUnary && inputs.length > 1) || (!gate.isUnary && inputs.length > 2);
   
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-cyan-500/20 transition-shadow duration-300 overflow-hidden flex flex-col">
@@ -67,9 +66,8 @@ export const GateCard: React.FC<GateCardProps> = ({ gate, inputs, onShowTruthTab
         <h3 className="text-lg font-bold text-cyan-600 dark:text-cyan-400">{gate.name}</h3>
         <button
           onClick={onShowTruthTable}
-          disabled={isTruthTableDisabled}
-          title={isTruthTableDisabled ? "Truth tables are available for 1 or 2 inputs only." : "Show truth table"}
-          className="px-4 py-2 text-sm font-medium text-white bg-cyan-600 rounded-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:focus:ring-offset-gray-800 transition-colors duration-200 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed"
+          title={"Show truth table"}
+          className="px-4 py-2 text-sm font-medium text-white bg-cyan-600 rounded-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 dark:bg-cyan-500 dark:hover:bg-cyan-600 dark:focus:ring-offset-gray-800 transition-colors duration-200"
         >
           Truth Table
         </button>

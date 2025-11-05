@@ -110,7 +110,7 @@ export default function App(): React.ReactElement {
       </main>
       
       {activeModalGate && (
-        <TruthTableModal gate={activeModalGate} onClose={closeModal} />
+        <TruthTableModal gate={activeModalGate} onClose={closeModal} numberOfInputs={numberOfInputs} />
       )}
     </div>
   );

@@ -1,14 +1,39 @@
-
-import React from 'react';
-import type { GateDef } from '../types';
+import React, { useMemo } from 'react';
+import type { GateDef, Binary } from '../types';
 
 interface TruthTableModalProps {
   gate: GateDef;
+  numberOfInputs: number;
   onClose: () => void;
 }
 
-export const TruthTableModal: React.FC<TruthTableModalProps> = ({ gate, onClose }) => {
+export const TruthTableModal: React.FC<TruthTableModalProps> = ({ gate, numberOfInputs, onClose }) => {
   const GateIcon = gate.svg;
+
+  const { headers, rows } = useMemo(() => {
+    const actualNumberOfInputs = gate.isUnary ? 1 : numberOfInputs;
+    
+    const newHeaders = Array.from(
+      { length: actualNumberOfInputs },
+      (_, i) => `Input ${String.fromCharCode(65 + i)}`
+    );
+    newHeaders.push('Output');
+
+    const newRows: Binary[][] = [];
+    const numCombinations = 1 << actualNumberOfInputs;
+
+    for (let i = 0; i < numCombinations; i++) {
+      const currentInputs: Binary[] = [];
+      for (let j = actualNumberOfInputs - 1; j >= 0; j--) {
+        currentInputs.push((i >> j) & 1 ? 1 : 0);
+      }
+      const output = gate.logic(currentInputs);
+      newRows.push([...currentInputs, output]);
+    }
+
+    return { headers: newHeaders, rows: newRows };
+  }, [gate, numberOfInputs]);
+
 
   return (
     <div 
@@ -16,7 +41,7 @@ export const TruthTableModal: React.FC<TruthTableModalProps> = ({ gate, onClose 
       onClick={onClose}
     >
       <div 
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95 hover:scale-100"
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 scale-95 hover:scale-100"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
@@ -29,19 +54,19 @@ export const TruthTableModal: React.FC<TruthTableModalProps> = ({ gate, onClose 
           </button>
         </div>
         <div className="p-6">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-96">
             <table className="w-full text-left table-auto">
-              <thead>
-                <tr className="bg-gray-100 dark:bg-gray-700">
-                  {gate.truthTable.headers.map((header, index) => (
-                    <th key={index} className="px-6 py-3 text-sm font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
+              <thead className="sticky top-0 bg-gray-100 dark:bg-gray-700">
+                <tr>
+                  {headers.map((header, index) => (
+                    <th key={index} className="px-6 py-3 text-sm font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300 text-center">
                       {header}
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {gate.truthTable.rows.map((row, rowIndex) => (
+                {rows.map((row, rowIndex) => (
                   <tr key={rowIndex} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                     {row.map((cell, cellIndex) => (
                       <td key={cellIndex} className="px-6 py-4 whitespace-nowrap font-mono text-lg text-center text-gray-800 dark:text-gray-200">

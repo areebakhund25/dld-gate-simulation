@@ -18,8 +18,4 @@ export interface GateDef {
   logic: (inputs: Binary[]) => Binary;
   isUnary?: boolean;
   svg: React.FC<{ className?: string }>;
-  truthTable: { 
-    headers: string[];
-    rows: (Binary | string)[][];
-  };
 }
