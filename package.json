@@ -1,5 +1,5 @@
 {
-  "name": "dld-gate-simulator",
+  "name": "dld-gate-&-latch-simulator",
   "private": true,
   "version": "0.0.0",
   "type": "module",
